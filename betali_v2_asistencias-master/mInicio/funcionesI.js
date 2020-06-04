@@ -69,7 +69,68 @@ function verUsuarios(){
 }
 
 
+//Funcion para cambiar contraseña
+function cambiarPassModal() {
+    $('#passModalIndex').modal();
+        var idUsuario = $("#inicioIdusuario").val();
+        console.log(idUsuario);
+        $('#btnActualizarModal').on("click",function (){        
+            var pass = $("#nuevaPassModal").val();
+            $.ajax({
+                url:"../mInicio/cambiar_pass.php",
+                type:"POST",
+                dateType:"html",
+                data:{idUsuario,pass},
+                success:function(respuesta){
+                    
+                $("#passModalIndex").modal('hide');
+                swal("La constraseña ha sido actualizada!");
+                limpiarNuevaPassIndex();
 
+
+            },
+            error:function(xhr,status){
+                console.log("Error al actualizar la contraseña"); 
+            },
+        });
+        return false;
+    });
+}
+function passRandomIndex(numero) {
+    var caracteres = "abcdefghijkmnpqrtuvwxyzABCDEFGHIJKLMNPQRTUVWXYZ2346789";
+    var contraseña = "";
+    for (i=0; i<numero; i++) contraseña += caracteres.charAt(Math.floor(Math.random()*caracteres.length));
+    $("#nuevaPassModal").val(contraseña);
+    $("#rePassModal").val(contraseña);
+    validarPassIndex();
+    swal("Nueva contraseña generada", " "+contraseña, "success");
+}
+
+//Validacion de contraseña al teclear
+$("#nuevaPassModal").keyup(function(){
+    validarPassIndex();
+});
+$("#rePassModal").keyup(function(){
+    validarPassIndex();
+});
+
+//Validar contraseña
+function validarPassIndex() {
+    var pass = document.getElementById("nuevaPassModal").value;
+    var rePass = document.getElementById("rePassModal").value;
+    if (pass.length > 7 && rePass.length > 7 && pass == rePass) {
+        $('#btnActualizarModal').removeAttr("disabled");
+    } else {
+        $("#btnActualizarModal").attr("disabled","disabled");
+    }
+}
+
+//Limpiar campos del modal
+function limpiarNuevaPassIndex(params) {
+    $("#nuevaPassModal").val("");
+    $("#rePassModal").val("");
+}
+// ------------------------------------------------------------------------------------------------------------------------------------------------
 function abrirModalPDF(id,ruta,modulo) {
 
     $("#txtTitularPDF").text(modulo)
@@ -352,6 +413,7 @@ function salir(){
               var idUsuario=$("#inicioIdusuario").val();
               actividad  ="Salio del sistema";
               log(actividad,idUsuario);
+
           }, 2000);}
           else{
               alertify.error(" <i class='fa fa-times fa-lg'></i> Cancelado",2);

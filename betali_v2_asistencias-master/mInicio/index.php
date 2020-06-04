@@ -125,10 +125,38 @@ $fecha=date("Y-m-d");
                 
                 <section id="Listado-EC" class="animated  fadeIn contenedor" style="display:none;"></section>
             </div>       
-
         </div>
-
     </div>
+     <!-- modal -->
+     <div class="modal fade" id="passModalIndex" tabindex="-1" role="dialog" aria-labelledby="passModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="passModalLabelModal">Cambio de Contraseña</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="nuevaPassModal" class="col-form-label">Nueva contraseña:</label>
+                                    <input type="password" class="form-control" id="nuevaPassModal">
+                                </div>
+                                <div class="form-group">
+                                    <label for="rePassModal" class="col-form-label">Confirmar contraseña:</label>
+                                    <input type="password" class="form-control" id="rePassModal">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-danger" data-dismiss="modal" onclick="limpiarNuevaPassIndex()">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="btnGenerarModal" onclick="passRandomIndex(8)">Generar contraseña</button>
+                            <button type="button" class="btn btn-success" id="btnActualizarModal" disabled>Actualizar contraseña</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
     <!-- Modal de carga -->
         <?php include'../modales/modalCarga.php'; ?>
