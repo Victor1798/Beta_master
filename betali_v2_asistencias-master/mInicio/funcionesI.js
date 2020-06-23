@@ -166,6 +166,8 @@ function aplicarTema(id,validador){
 
                 if(validador=='enlace'){
                     preloader(1,"Cambiando al tema "+tema);
+                    sonidoTema();
+
                     actividad  ="Ha cambiado al tema "+tema;
                     var idUser=$("#inicioIdusuario").val();
 
@@ -183,6 +185,16 @@ function aplicarTema(id,validador){
         },
     });
 }
+
+function sonidoTema(params) {
+    var sonido = new Audio();
+    sonido.src = "../audios/elec_12.mp3"
+    sonido.play();
+    console.log('Cambio de tema realizado');
+}
+
+
+
 
 function relacionarTema(idTema){
     var idUsuario = $("#inicioIdusuario").val();
@@ -413,6 +425,7 @@ function salir(){
               var idUsuario=$("#inicioIdusuario").val();
               actividad  ="Salio del sistema";
               log(actividad,idUsuario);
+              
 
           }, 2000);}
           else{

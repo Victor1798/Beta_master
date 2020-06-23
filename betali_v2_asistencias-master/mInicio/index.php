@@ -164,11 +164,16 @@ $fecha=date("Y-m-d");
     <!-- Modal de datos -->
         <?php include'../mDatosPersonales/modalDatos.php'; ?>
     <!-- Modal de datos -->
+            <?php include'../modales/modalHorario.php'; ?>
+
     <!-- Modal de Foto -->
         <?php include'../modales/modalFoto.php'; ?>
     <!-- Modal de Foto -->
     <!-- Modal de PDF -->
         <?php include'../modales/modalPDF.php'; ?>
+
+        <?php include'../modales/modalHorario.php'; ?>
+
     <!-- Modal de PDF -->
 
     <!-- jQuery -->
@@ -238,6 +243,16 @@ $fecha=date("Y-m-d");
             maxFilesNum: 1
         });
 
+    </script>
+
+    <script type='text/javascript'>
+    $(document).ready(function(){
+        $('#modalHorario').on('hidden.bs.modal', function (e) {
+            $(".diaH").attr("readonly","readonly");
+            $(".hSave").attr("disabled","disabled");
+            $("#cH").val('');
+        });
+        });
     </script>
     <script type='text/javascript'>
     $(document).ready(function(){ 

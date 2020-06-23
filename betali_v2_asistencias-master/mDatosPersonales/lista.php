@@ -22,7 +22,6 @@ $cadena = "SELECT
             FROM
                 datos ORDER BY id_datos DESC";
 $consultar = mysqli_query($conexionLi, $cadena);
-//$row = mysqli_fetch_array($consultar);
 
 ?>
 <div class="table-responsive">
@@ -36,6 +35,7 @@ $consultar = mysqli_query($conexionLi, $cadena);
                 <th scope="col">Datos</th>
                 <th scope="col">Foto</th>
                 <th scope="col">Audio</th>
+                <th scope="col">Horario</th>
                 <th scope="col">Clave</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Ap. Paterno</th>
@@ -53,6 +53,28 @@ $consultar = mysqli_query($conexionLi, $cadena);
 
             $id          = $row[0];
 
+            $cadena_datos= "SELECT id_horario, turno, l_entrada, l_salida, m_entrada, m_salida, mi_entrada, mi_salida, j_entrada, j_salida, v_entrada, v_salida, s_entrada, s_salida, d_entrada, d_salida, id_datos_persona
+            FROM horarios WHERE id_datos_persona = '$id'";
+            $consulta_datos = mysqli_query($conexionLi, $cadena_datos);
+            $row2 =mysqli_fetch_array($consulta_datos);
+            $horario = $row2[0];
+            $turno = $row2[1];
+            $l_entrada = $row2[2];
+            $l_salida = $row2[3];
+            $m_entrada = $row2[4];
+            $m_salida = $row2[5];
+            $mi_entrada = $row2[6];
+            $mi_salida = $row2[7];
+            $j_entrada = $row2[8];
+            $j_salida = $row2[9];
+            $v_entrada = $row2[10];
+            $v_salida = $row2[11];
+            $s_entrada = $row2[12];
+            $s_salida = $row2[13];
+            $d_entrada = $row2[14];
+            $d_salida = $row2[15];
+            $id_datos_persona = $row2[16];
+
             if ($row[1] == 1) {
                 $chkChecado    = "checked";
                 $dtnDesabilita = "";
@@ -64,7 +86,6 @@ $consultar = mysqli_query($conexionLi, $cadena);
                 $chkValor      = "0";
                 $iconSound="fa fa-volume-mute fa-lg";
             }
-
             $nombre     = $row[2];
             $paterno    = $row[3];
             $materno    = $row[4];
@@ -90,7 +111,13 @@ $consultar = mysqli_query($conexionLi, $cadena);
                 $icoFoto="<i class='fas fa-times fa-lg'></i>";
                 $tFoto="No";
             }
-
+            if ($id_datos_persona == $id){
+                $icoHorario="<i class='fa fa-times-circle'></i>";
+                $tHorario="Si";
+            }else{
+                $icoHorario="<i class='fa fa-calendar'></i>";
+                $tHorario="No";
+            }
             ?>
             <tr class="centrar">
                 <th scope="row" class="textoBase">
@@ -118,6 +145,11 @@ $consultar = mysqli_query($conexionLi, $cadena);
                 <td>
                     <button <?php echo $dtnDesabilita?> type="button" class="audio btn btn-link btn-sm activo"  id="btnSonido<?php echo $varGral?><?php echo $n?>" onclick="hablar('<?php echo $sonido?>')">
                     <i id="icoSound<?php echo $varGral?><?php echo $n?>" class="<?php echo $iconSound?>"></i>
+                    </button>
+                </td>
+                <td>
+                <button <?php echo $dtnDesabilita?> type="button" class="ventana btn btn-outline-danger btn-sm activo"  id="btnHorario<?php echo $varGral?><?php echo $n?>" onclick="abrirHorario('<?php echo $id?>','<?php echo $tHorario?>','<?php echo $nCompleto?>','<?php echo $l_entrada?>','<?php echo $l_salida?>','<?php echo $m_entrada?>','<?php echo $m_salida?>','<?php echo $mi_entrada?>','<?php echo $mi_salida?>','<?php echo $j_entrada?>','<?php echo $j_salida?>','<?php echo $v_entrada?>','<?php echo $v_salida?>','<?php echo $s_entrada?>','<?php echo $s_salida?>','<?php echo $d_entrada?>','<?php echo $d_salida?>','<?php echo $turno?>')">
+                        <?php echo $icoHorario?>
                     </button>
                 </td>
                 <td>
@@ -153,7 +185,6 @@ $consultar = mysqli_query($conexionLi, $cadena);
         $n++;
         }
         ?>
-
         </tbody>
         <tfoot>
             <tr class='hTabla'>
@@ -163,6 +194,7 @@ $consultar = mysqli_query($conexionLi, $cadena);
                 <th scope="col">Datos</th>
                 <th scope="col">Foto</th>
                 <th scope="col">Audio</th>
+                <th scope="col">Horarios</th>
                 <th scope="col">Clave</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Ap. Paterno</th>
@@ -180,7 +212,6 @@ print_r(mysqli_error($conexionLi));
 //Cierro la conexionLi
 mysqli_close($conexionLi);
 ?>
-
 <script type="text/javascript">
   var varGral='<?php echo $varGral?>';
   $(document).ready(function() {
@@ -224,7 +255,6 @@ mysqli_close($conexionLi);
                             columns:  [6,7,8,9,10],
                           }
                       }
-
             ]
         } );
     } );

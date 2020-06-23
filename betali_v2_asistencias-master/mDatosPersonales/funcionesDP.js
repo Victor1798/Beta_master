@@ -45,8 +45,8 @@ $("#frmGuardar-DP").submit(function(e){
                     alertify.success("<i class='fa fa-save fa-lg'></i>", 2);
                     $('#nombre').focus();
                     actividad  ="Se insertado un nuevo registro a la tabla "+nombreModulo_DP;
-                    var idUser=$("#inicioIdusuario").val();
-                    log(actividad,idUser);
+                    var idUsuario=$("#inicioIdusuario").val();
+                    log(actividad,idUsuario);
         
                 },
                 error:function(xhr,status){
@@ -106,8 +106,8 @@ $("#frmActualizar-DP").submit(function(e){
                         alertify.success("<i class='fa fa-bolt fa-lg'></i>", 2);
                     $("#btnCancelarG-DP , #btnCancelarA-DP").click();
                     actividad  ="Se ha modificado un registro de la tabla tabla "+nombreModulo_DP;
-                    var idUser=$("#inicioIdusuario").val();
-                    log(actividad,idUser);
+                    var idUsuario=$("#inicioIdusuario").val();
+                    log(actividad,idUsuario);
                     
                     $('#nombre').focus();
                 },
@@ -219,23 +219,26 @@ function cambiar_estatus_DP(id,consecutivo){
                 $("#btnModal-DP"+consecutivo).removeAttr('disabled');
                 $("#btnFoto-DP"+consecutivo).removeAttr('disabled');
                 $("#btnSonido-DP"+consecutivo).removeAttr('disabled');
+                $("#btnHorario-DP"+consecutivo).removeAttr('disabled');
+
                 $("#icoSound-DP"+consecutivo).removeClass("fa fa-volume-mute fa-lg");
                 $("#icoSound-DP"+consecutivo).addClass("fa fa-volume-up fa-lg");
                 actividad  ="Se ha reactivado un registro de la tabla tabla "+nombreModulo_DP;
-                var idUser=$("#inicioIdusuario").val();
-                log(actividad,idUser);
+                var idUsuario=$("#inicioIdusuario").val();
+                log(actividad,idUsuario);
             }else{
                 alertify.error("<i class='fa fa-times fa-lg'></i>", 2);
                 $("#btnEditar-DP"+consecutivo).attr('disabled','disabled');
                 $("#btnImprimir-DP"+consecutivo).attr('disabled','disabled');
                 $("#btnModal-DP"+consecutivo).attr('disabled','disabled');
                 $("#btnFoto-DP"+consecutivo).attr('disabled','disabled');
+                $("#btnHorario-DP"+consecutivo).attr('disabled','disabled');
                 $("#btnSonido-DP"+consecutivo).attr('disabled','disabled');
                 $("#icoSound-DP"+consecutivo).removeClass("fa fa-volume-up fa-lg");
                 $("#icoSound-DP"+consecutivo).addClass("fa fa-volume-mute fa-lg");
                 actividad  ="Se ha desactivado un registro de la tabla tabla "+nombreModulo_DP;
-                var idUser=$("#inicioIdusuario").val();
-                log(actividad,idUser);
+                var idUsuario=$("#inicioIdusuario").val();
+                log(actividad,idUsuario);
             }
         },
         error:function(xhr,status){
@@ -244,6 +247,386 @@ function cambiar_estatus_DP(id,consecutivo){
     });
 
 }
+
+//Modal Horario----------------------------------------------------------------------------------------------------------------------------------------
+function abrirHorario(id,valor,nombre_user,LunEntrada,LunSalida,MarEntrada,MarSalida,MierEntrada,MierSalida,JueEntrada,JueSalida,VieEntrada,VieSalida,SabEntrada,SabSalida,DomEntrada,DomSalida,turnoT) {
+
+    $("#txtTitularHorario").text("Horario - "+nombre_user);
+    $("#nombrePersonaH").val(nombre_user);
+
+    $("#idPs").val(id);
+
+    $("#registroDatos").val(valor);
+    if (valor=="No") {
+        $("#frmHorario").attr("data-action","agregar");
+
+        $("#LunEntrada").val("--:--");
+        $("#LunSalida").val("--:--");
+        $("#MarEntrada").val("--:--");
+        $("#MarSalida").val("--:--");
+        $("#MierEntrada").val("--:--");
+        $("#MierSalida").val("--:--");
+        $("#JueEntrada").val("--:--");
+        $("#VieEntrada").val("--:--");
+        $("#VieSalida").val("--:--");
+        $("#SabEntrada").val("--:--");
+        $("#SabSalida").val("--:--");
+        $("#DomEntrada").val("--:--");
+        $("#DomSalida").val("--:--");
+
+
+        $("#turnoT").val('').trigger('change');
+        $(".horasDia").attr("readonly","readonly");
+        $(".salidaT").val("");
+        $(".entradaT").val("");
+        $("#btnHorario").text(" Guardar");
+
+        $("#totalHorasT").val("");
+    }else{
+        $("#registroDatos").val(valor);
+        $("#LunEntrada").val(LunEntrada);
+        $("#LunSalida").val(LunSalida);
+        $("#MarEntrada").val(MarEntrada);
+        $("#MarSalida").val(MarSalida);
+        $("#MierEntrada").val(MierEntrada);
+        $("#MierSalida").val(MierSalida);
+        $("#JueEntrada").val(JueEntrada);
+        $("#JueSalida").val(JueSalida);
+        $("#VieEntrada").val(VieEntrada);
+        $("#VieSalida").val(VieSalida);
+        $("#SabEntrada").val(SabEntrada);
+        $("#SabSalida").val(SabSalida);
+        $("#DomEntrada").val(DomEntrada);
+        $("#DomSalida").val(DomSalida);
+        $("#turnoT").val(turnoT).trigger('change');
+        $("#btnHorario").text(" Actualizar");
+
+        $("#frmHorario").attr("data-action","editar");
+    }
+    $("#modalHorario").modal("show");
+}
+
+$('#turnoT').on('change',function(){
+    var oTurno = $(this).val();
+    if(oTurno == 'Especial')
+    {
+        $("#btnHorario").attr("disabled","disabled");
+        $("#totalHorasT").val("30 horas");
+
+
+        var datos = $("#registroDatos").val();
+        if(datos == "No"){
+            $(".salidaT").val("");
+            $(".entradaT").val("");
+            $("#totalHorasT").val("");
+        }
+        else{
+            $("#totalHorasT").val("...");
+        }
+        $(".horasDia").removeAttr("readonly");
+        //$(".horasDia").val("--:--");
+    }
+    else if(oTurno == 'Matutino'){
+        $(".horasDia").attr("readonly","readonly");
+        $(".guardarHra").removeAttr("disabled","disabled");
+        $(".entradaT").val("06:00");
+        $(".salidaT").val("12:00");
+
+        $("#totalHorasT").val("30 horas");
+    }
+    else if(oTurno == 'Vespertino'){
+        $(".horasDia").attr("readonly","readonly");
+        $(".guardarHra").removeAttr("disabled","disabled");
+        $(".entradaT").val("12:00");
+        $(".salidaT").val("18:00");
+
+        $("#totalHorasT").val("30 horas");
+ 
+    }
+    else if(oTurno == 'Nocturno'){
+        $(".horasDia").attr("readonly","readonly");
+        $(".guardarHra").removeAttr("disabled","disabled");
+        $(".entradaT").val("18:00");
+        $(".salidaT").val("00:00");
+
+        $("#totalHorasT").val("30 horas");
+    }
+});
+
+
+//Validaciones
+$('#LunSalida').on('change',function(){
+    var valCampoE = $("#LunEntrada").val();
+    var valCampoS = $("#LunSalida").val();
+    if(valCampoS == "" || valCampoE == "")
+    {
+        alertify.danger("El campo no puede quedar vacios", 3);
+    }
+    else{
+        if (valCampoS < valCampoE ) {
+            alertify.error("La hora de la salida no puede ser menor a la hora de la entrada", 3);
+        }
+    }
+});
+
+$('#MarSalida').on('change',function(){
+    var valCampoE = $("#MarEntrada").val();
+    var valCampoS = $("#MarSalida").val();
+    if(valCampoS == "" || valCampoE == ""){
+        alertify.error("El campo no puede quedar vacios", 3);
+
+    }else{
+    if (valCampoS < valCampoE ) {
+        alertify.error("La hora de la salida no puede ser menor a la hora de la entrada", 3);
+    }
+}
+});
+
+$('#MierSalida').on('change',function(){
+    var valCampoE = $("#MierEntrada").val();
+    var valCampoS = $("#MierSalida").val();
+    if(valCampoS == "" || valCampoE == ""){
+        alertify.error("El campo no puede quedar vacios", 3);
+
+    }else{
+    if (valCampoS < valCampoE ) {
+        alertify.error("La hora de la salida no puede ser menor a la hora de la entrada", 3);
+
+    }
+}
+});
+
+$('#JueSalida').on('change',function(){
+    var valCampoE = $("#JueEntrada").val();
+    var valCampoS = $("#JueSalida").val();
+    if(valCampoS == "" || valCampoE == ""){
+        alertify.error("El campo no puede quedar vacios", 3);
+
+    }else{
+    if (valCampoS < valCampoE ) {
+        alertify.error("La hora de la salida no puede ser menor a la hora de la entrada", 3);
+
+    }
+}
+});
+
+$('#VieSalida').on('change',function(){
+    var valCampoE = $("#VieEntrada").val();
+    var valCampoS = $("#VieSalida").val();
+    if(valCampoS == "" || valCampoE == ""){
+        alertify.error("El campo no puede quedar vacios", 3);
+
+    }else{
+    if (valCampoS < valCampoE ) {
+        alertify.error("La hora de la salida no puede ser menor a la hora de la entrada", 3);
+    }
+}
+});
+
+$('#SabSalida').on('change',function(){
+    var valCampoE = $("#SabEntrada").val();
+    var valCampoS = $("#SabSalida").val();
+    if(valCampoS == "" || valCampoE == ""){
+        alertify.error("El campo no puede quedar vacios", 3);
+
+    }else{
+    if (valCampoS < valCampoE ) {
+        alertify.error("La hora de la salida no puede ser menor a la hora de la entrada", 3);
+    }
+}
+});
+$('#DomSalida').on('change',function(){
+    var valCampoE = $("#DomEntrada").val();
+    var valCampoS = $("#DomSalida").val();
+    if(valCampoS == "" || valCampoE == ""){
+        alertify.error("El campo no puede quedar vacios", 3);
+
+    }else{
+    if (valCampoS < valCampoE ) {
+        alertify.error("La hora de la salida no puede ser menor a la hora de la entrada", 3);
+    }
+}
+});
+
+$('#LunSalida').on('change',function(){
+    var LunEntrada = $("#LunEntrada").val();
+    var LunSalida = $("#LunSalida").val();
+    var MarEntrada = $("#MarEntrada").val();
+    var MarSalida = $("#MarSalida").val();
+    var MierEntrada = $("#MierEntrada").val();
+    var MierSalida = $("#MierSalida").val();
+    var JueEntrada = $("#JueEntrada").val();
+    var JueSalida = $("#JueSalida").val();
+    var VieEntrada = $("#VieEntrada").val();
+    var VieSalida = $("#VieSalida").val();
+
+    console.log("lunes: "+LunEntrada, LunSalida + " || Martes:" + MarEntrada, MarSalida + " || Miercoles: "+ MierEntrada ,MierSalida + " || Jueves: " + JueEntrada, JueSalida + " || Viernes: " + VieEntrada, VieSalida);
+
+    if (LunEntrada < LunSalida && MarEntrada < MarSalida && MierEntrada < MierSalida && JueEntrada < JueSalida && VieEntrada < VieSalida) {
+        console.log("El boton se ha desabilitado");
+        $("#btnHorario").removeAttr("disabled");
+    }
+    else{
+        console.log("El boton se ha bloqueado");
+
+        $("#btnHorario").attr("disabled","disabled");
+
+    }
+});
+$('#MarSalida').on('change',function(){
+    var LunEntrada = $("#LunEntrada").val();
+    var LunSalida = $("#LunSalida").val();
+    var MarEntrada = $("#MarEntrada").val();
+    var MarSalida = $("#MarSalida").val();
+    var MierEntrada = $("#MierEntrada").val();
+    var MierSalida = $("#MierSalida").val();
+    var JueEntrada = $("#JueEntrada").val();
+    var JueSalida = $("#JueSalida").val();
+    var VieEntrada = $("#VieEntrada").val();
+    var VieSalida = $("#VieSalida").val();
+
+
+    if (LunEntrada < LunSalida && MarEntrada < MarSalida && MierEntrada < MierSalida && JueEntrada < JueSalida && VieEntrada < VieSalida) {
+        console.log("El boton se ha desabilitado");
+        $("#btnHorario").removeAttr("disabled");
+    }
+    else{
+        $("#btnHorario").attr("disabled","disabled");
+
+    }
+});
+$('#MierSalida').on('change',function(){
+    var LunEntrada = $("#LunEntrada").val();
+    var LunSalida = $("#LunSalida").val();
+    var MarEntrada = $("#MarEntrada").val();
+    var MarSalida = $("#MarSalida").val();
+    var MierEntrada = $("#MierEntrada").val();
+    var MierSalida = $("#MierSalida").val();
+    var JueEntrada = $("#JueEntrada").val();
+    var JueSalida = $("#JueSalida").val();
+    var VieEntrada = $("#VieEntrada").val();
+    var VieSalida = $("#VieSalida").val();
+
+
+    if (LunEntrada < LunSalida && MarEntrada < MarSalida && MierEntrada < MierSalida && JueEntrada < JueSalida && VieEntrada < VieSalida) {
+        console.log("El boton se ha desabilitado");
+        $("#btnHorario").removeAttr("disabled");
+    }
+    else{
+        $("#btnHorario").attr("disabled","disabled");
+
+    }
+});
+$('#JueSalida').on('change',function(){
+    var LunEntrada = $("#LunEntrada").val();
+    var LunSalida = $("#LunSalida").val();
+    var MarEntrada = $("#MarEntrada").val();
+    var MarSalida = $("#MarSalida").val();
+    var MierEntrada = $("#MierEntrada").val();
+    var MierSalida = $("#MierSalida").val();
+    var JueEntrada = $("#JueEntrada").val();
+    var JueSalida = $("#JueSalida").val();
+    var VieEntrada = $("#VieEntrada").val();
+    var VieSalida = $("#VieSalida").val();
+
+
+    if (LunEntrada < LunSalida && MarEntrada < MarSalida && MierEntrada < MierSalida && JueEntrada < JueSalida && VieEntrada < VieSalida) {
+        console.log("El boton se ha desabilitado");
+        $("#btnHorario").removeAttr("disabled");
+    }
+    else{
+        $("#btnHorario").attr("disabled","disabled");
+
+    }
+});
+$('#VieSalida').on('change',function(){
+    var LunEntrada = $("#LunEntrada").val();
+    var LunSalida = $("#LunSalida").val();
+    var MarEntrada = $("#MarEntrada").val();
+    var MarSalida = $("#MarSalida").val();
+    var MierEntrada = $("#MierEntrada").val();
+    var MierSalida = $("#MierSalida").val();
+    var JueEntrada = $("#JueEntrada").val();
+    var JueSalida = $("#JueSalida").val();
+    var VieEntrada = $("#VieEntrada").val();
+    var VieSalida = $("#VieSalida").val();
+
+
+    if (LunEntrada < LunSalida && MarEntrada < MarSalida && MierEntrada < MierSalida && JueEntrada < JueSalida && VieEntrada < VieSalida) {
+        console.log("El boton se ha desabilitado");
+        $("#btnHorario").removeAttr("disabled");
+    }
+    else{
+        $("#btnHorario").attr("disabled","disabled");
+
+    }
+});
+
+
+// Horario agregar o editar--------------------------------------------------------------------------------------------------------------------------
+$("#frmHorario").submit(function(e){
+    //extraer el valor de altributo data action
+    var accion = $(this).attr("data-action");
+    var perSona = $("#nombrePersonaH").val();
+    var idUsuario = $("#idPs").val();
+
+    console.log(perSona);
+
+    var LunEntrada = $("#LunEntrada").val();
+    var LunSalida = $("#LunSalida").val();
+    var MarEntrada = $("#MarEntrada").val();
+    var MarSalida = $("#MarSalida").val();
+    var MierEntrada = $("#MierEntrada").val();
+    var MierSalida = $("#MierSalida").val();
+    var JueEntrada = $("#JueEntrada").val();
+    var JueSalida = $("#JueSalida").val();
+    var VieEntrada = $("#VieEntrada").val();
+    var VieSalida = $("#VieSalida").val();
+    var SabEntrada = $("#SabEntrada").val();
+    var SabSalida = $("#SabSalida").val();
+    var DomEntrada = $("#DomEntrada").val();
+    var DomSalida = $("#DomSalida").val();
+    var turnoT = $("#turnoT").val();
+
+     var url = "";
+
+     var actividad = "";
+     if(accion == "agregar")
+     {
+         url ="../mDatosPersonales/agregarHorario.php";
+         actividad = "Se ha creado un horario para la persona "+perSona;
+     }
+     else if(accion == "editar")
+     {
+         url="../mDatosPersonales/editarHorario.php";
+         actividad = "Se actualizado el horario para la persona "+perSona;
+
+         $("#btnHorario").val("Actualizar");
+     }
+
+     $.ajax({
+        url:url, //url donde mandare recibir la informacion
+        type:"POST", //Tipo de nevio de AJAX
+        dataType:"html",//Tipo de dato que voy a recibir
+        data: {LunEntrada,LunSalida,MarEntrada,MarSalida,MierEntrada,MierSalida,JueEntrada,JueSalida,VieEntrada,VieSalida,SabEntrada,SabSalida,DomEntrada,DomSalida,turnoT,idUsuario},
+         success:function(respuesta)
+         {
+            alertify.success("<i class='fa fa-save fa-lg'></i>", 3);
+            llenar_lista_DP();
+            log(actividad,idUsuario);
+            $("#frmHorario").attr("data-action","agregar");
+            $('#modalHorario').modal('hide');
+         },
+         error:function(respuesta_error)
+         {
+             alert("Error: "+ respuesta_error);
+         }
+     });
+     e.preventDefault();
+     return false;
+
+ });
+
 
 function abrirModalDatos_DP(id,nombre,apPaterno,apMaterno,fNac,edad,correo,curp,clave,domicilio,sexo,ecivil) {
     $("#modalTitle-DP").text("Datos personales - "+nombre+' '+apPaterno);
