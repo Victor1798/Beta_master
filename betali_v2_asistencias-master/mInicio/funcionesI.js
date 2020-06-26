@@ -16,7 +16,11 @@ function ocultarSecciones(){
     $("#guardar-EC").hide();
     $("#editar-EC").hide();
     $("#Listado-EC").hide();
-    //USUARIOS
+    //TEMAS
+    $("#temas").hide();
+    $("#guardar-TS").hide();
+    $("#editar-TS").hide();
+    $("#Listado-TS").hide();
 }
 
 function verAsistencias(){
@@ -67,6 +71,26 @@ function verEstadoCivil(){
 function verUsuarios(){
     ocultarSecciones();
 }
+
+//Funcion para mostrar los temas
+function verTemas(){
+    ocultarSecciones();
+    $("#lblTitular").text("Temas");
+
+    $("#editar-TS").hide();
+    $("#guardar-TS").hide();
+    $("#Listado-TS").fadeIn();
+    $("#frmGuardar-TS")[0].reset();
+    $("#frmActualizar-TS")[0].reset();
+    $("#badgeInfo").text("Lista");
+
+    $("#temas").show();
+    llenar_lista_TS();
+    var idTema=$("#inicioIdTema").val()
+    aplicarTema(idTema,'otro');      
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------
 
 
 //Funcion para cambiar contraseña
@@ -432,8 +456,14 @@ function salir(){
               alertify.error(" <i class='fa fa-times fa-lg'></i> Cancelado",2);
           }
         });
-      
 }
+//------------------------------------------------------------------------
+
+
+
+
+
+
 
 $(document).ready(function () {
     

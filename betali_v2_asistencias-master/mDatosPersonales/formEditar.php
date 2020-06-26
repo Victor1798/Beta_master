@@ -75,7 +75,6 @@ $varGral="-DP";
             <div class="form-group">
                 <label for="eEcivil">Estado Civil:</label>
                 <select id="eEcivil" class="select2" style="width: 100%" >
-
                 </select>
             </div>
         </div>

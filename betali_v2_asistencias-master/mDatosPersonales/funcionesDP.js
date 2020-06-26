@@ -1,6 +1,6 @@
 //VARIABLE GLOBAL PARA NOMBRAR LOS ELEMENTOS DE LOS  FORMULARIOS
 //DATOS PERSONALES -DP 
-var nombreModulo_DP="Datos Personales";
+var nombreModulo_DP = "Datos Personales";
 
 $("#frmGuardar-DP").submit(function(e){
 
